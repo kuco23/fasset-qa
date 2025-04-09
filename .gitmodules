@@ -1,0 +1,4 @@
+[submodule "fasset-bots"]
+	path = fasset-bots
+	url = git@gitlab.com:flarenetwork/fassets/fasset-bots.git
+	branch = core-vault

@@ -1,0 +1,1 @@
+node ./fasset-bots/packages/fasset-bots-cli/dist/src/run/run-agent -c ./config/config.json -s ./config/secrets.json

@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "log/text/.6f7e9d840f2c79ed0435516f0feb40eeb6373428-audit.json",
+    "files": [
+        {
+            "date": 1744034940967,
+            "name": "log/text/simple-wallet-2025-04-07.log",
+            "hash": "be49114c6f09d96e389600e511073625ef7322f44d996f6f3a5bc676df5593ce"
+        },
+        {
+            "date": 1744105803284,
+            "name": "log/text/simple-wallet-2025-04-08.log",
+            "hash": "d8b5f5ac7e8867b74e759a557d99c2ac23c2ed4e16e2691fe7770a4bb0a9371d"
+        }
+    ],
+    "hashType": "sha256"
+}
