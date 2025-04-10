@@ -40,5 +40,9 @@ class Constants:
     return 'FTestXRP'
 
   @property
-  def lot_size(self) -> str:
+  def lot_size(self) -> int:
     return 20000000
+
+  @property
+  def token_decimals(self) -> int:
+    return 1000000

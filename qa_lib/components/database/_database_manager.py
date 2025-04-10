@@ -19,14 +19,21 @@ class DatabaseManager:
   def open_core_vault_transfers(self, agent_vault: str) -> List[AgentRedemption]:
     with Session(self.engine, expire_on_commit=False) as session:
       return session.query(AgentRedemption).filter(
-        AgentRedemption.agent_address == agent_vault and
-        AgentRedemption.is_transfer_to_core_vault == True and
-        AgentRedemption.final_state == None
+        AgentRedemption.agent_address == agent_vault,
+        AgentRedemption.is_transfer_to_core_vault == True,
+        AgentRedemption.final_state.is_(None)
       ).all()
 
   def open_core_vault_returns(self, agent_vault: str) -> List[ReturnFromCoreVault]:
-    with Session(self.engint, expire_on_commit=False) as session:
+    with Session(self.engine, expire_on_commit=False) as session:
       return session.query(ReturnFromCoreVault).filter(
         ReturnFromCoreVault.agent_address == agent_vault,
-        ReturnFromCoreVault.state == None
+        ReturnFromCoreVault.state != 'Done',
+        ReturnFromCoreVault.cancelled == False
       )
+
+  def get(self, agent_vault: str) -> List[AgentRedemption]:
+    with Session(self.engine, expire_on_commit=False) as session:
+      return session.query(AgentRedemption).filter(
+        AgentRedemption.agent_address == agent_vault
+      ).all()

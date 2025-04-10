@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy.orm import mapped_column, Mapped, DeclarativeBase
 
 
@@ -19,6 +20,7 @@ class AgentRedemption(Base):
   final_state: Mapped[str] = mapped_column()
   request_id: Mapped[int] = mapped_column()
   redeemer_address: Mapped[str] = mapped_column()
+  created_at: Mapped[datetime] = mapped_column()
 
 class ReturnFromCoreVault(Base):
   __tablename__ = 'return_from_core_vault'
@@ -30,3 +32,4 @@ class ReturnFromCoreVault(Base):
   payment_reference: Mapped[str] = mapped_column()
   cancelled: Mapped[bool] = mapped_column()
   tx_hash: Mapped[str] = mapped_column()
+  created_at: Mapped[datetime] = mapped_column()

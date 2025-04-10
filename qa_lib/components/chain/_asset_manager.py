@@ -14,4 +14,3 @@ class AssetManager:
 
   def agent_info(self, agent_vault: str):
     return self.contract.functions.getAgentInfo(agent_vault).call()._asdict()
-
