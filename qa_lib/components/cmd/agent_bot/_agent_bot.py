@@ -19,18 +19,17 @@ class AgentBotCli(Cmd, AgentBotCliOutputParser):
   def deposit_agent_collaterals(self, agent_vault: str, lots: int):
     raw = self.run(['depositCollaterals', agent_vault, str(lots)])
     parsed = self.parse_deposit_agent_collaterals(raw)
-    resp = self._ensure_parser_response(parsed)
-    return resp
+    return self._ensure_parser_response(parsed)
 
   def make_agent_available(self, agent_vault: str):
     raw = self.run(['enter', agent_vault])
     parsed = self.parse_agent_available(raw)
-    resp = self._ensure_parser_response(parsed)
-    return resp
+    return self._ensure_parser_response(parsed)
 
   def transfer_to_core_vault(self, agent_vault: str, amount: int):
-    resp = self.run(['transferToCoreVault', agent_vault, str(amount)])
-    print(resp)
+    raw = self.run(['transferToCoreVault', agent_vault, str(amount)])
+    parsed = self.parse_request_transfer_to_core_vault(raw)
+    return self._ensure_parser_response(parsed)
 
   def return_from_core_vault(self, agent_vault: str, amount: int):
     resp = self.run(['returnFromCoreVault', agent_vault, str(amount)])

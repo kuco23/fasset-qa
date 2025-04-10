@@ -12,8 +12,9 @@ class UserBotCli(Cmd, UserBotCliOutputParser):
 
   def mint(self, lots: int, agent_vault: Optional[str] = None):
     cmd_ext = ['-a', agent_vault] if agent_vault else []
-    resp = self.run(['mint', str(lots), *cmd_ext])
-    print(resp)
+    raw = self.run(['mint', str(lots), *cmd_ext])
+    parsed = self.parse_user_mint(raw)
+    return self._ensure_parser_response(parsed)
 
   def run(self, commands: List[str]):
     commands.extend(['-f', self.fasset])

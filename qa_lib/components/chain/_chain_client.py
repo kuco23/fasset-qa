@@ -1,4 +1,5 @@
 from web3 import Web3, HTTPProvider
+from web3.contract import Contract
 
 
 class ChainClient:
@@ -13,6 +14,5 @@ class ChainClient:
       }
     }))
 
-  def get_contract(self, abi: object, address: str):
-    contract = self._client.eth.contract(abi=abi, address=address)
-    return contract.functions
+  def get_contract(self, abi: object, address: str) -> Contract:
+    return self._client.eth.contract(abi=abi, address=address, decode_tuples=True)

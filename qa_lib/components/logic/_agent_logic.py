@@ -4,7 +4,7 @@ from ..cmd import AgentBotCli
 from ..params import ParamLoader
 
 
-MINTED_UBA_CORE_VAULT_TRANSFER_THRESHOLD_RATIO = 0.75
+MINTED_UBA_CORE_VAULT_TRANSFER_THRESHOLD_RATIO = 0.6
 MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO = 0.2
 
 class AgentLogic:
@@ -23,7 +23,7 @@ class AgentLogic:
         self.agent_bot.make_agent_available(agent_vault)
 
   def transfer_to_core_vault_if_makes_sense(self, agent_vault: str):
-    executing = self.database.agent_executing_transfer_to_core_vault(agent_vault)
+    executing = self.agent_executing_transfer_to_core_vault(agent_vault)
     if executing: return
     optimal_transfer_to_core_vault_uba = self.optimal_agent_transfer_to_core_vault_uba(agent_vault)
     optimal_transfer_to_core_vault_lots = self.uba_to_lots(optimal_transfer_to_core_vault_uba)
@@ -72,3 +72,7 @@ class AgentLogic:
 
   def uba_to_lots(self, amount: int):
     return amount / self.params.lot_size
+
+  def agent_executing_transfer_to_core_vault(self, agent_vault: str):
+    requests = self.database.open_core_vault_transfers(agent_vault)
+    return len(requests) > 0

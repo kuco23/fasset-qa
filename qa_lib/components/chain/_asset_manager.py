@@ -7,12 +7,11 @@ class AssetManager:
     self.contract = client.get_contract(abi, address)
 
   def core_vault_available_amount(self) -> Tuple[int, int]:
-    return self.contract.coreVaultAvailableAmount().call()
+    return self.contract.functions.coreVaultAvailableAmount().call()
 
   def maximum_transfer_to_core_vault(self, agent_vault: str) -> Tuple[int, int]:
-    return self.contract.maximumTransferToCoreVault(agent_vault).call()
+    return self.contract.functions.maximumTransferToCoreVault(agent_vault).call()
 
   def agent_info(self, agent_vault: str):
-    return self.contract.getAgentInfo(agent_vault).call()
-
+    return self.contract.functions.getAgentInfo(agent_vault).call()._asdict()
 

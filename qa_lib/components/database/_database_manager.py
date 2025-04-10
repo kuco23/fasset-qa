@@ -2,7 +2,7 @@ from typing import List
 from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import Session
 from sqlalchemy_utils import database_exists, create_database
-from ._entities import Agent, AgentRedemption
+from ._entities import Agent, AgentRedemption, ReturnFromCoreVault
 
 class DatabaseManager:
 
@@ -16,10 +16,17 @@ class DatabaseManager:
     with Session(self.engine, expire_on_commit=False) as session:
       return session.query(Agent).all()
 
-  def agent_executing_transfer_to_core_vault(self, agent_vault: str) -> bool:
+  def open_core_vault_transfers(self, agent_vault: str) -> List[AgentRedemption]:
     with Session(self.engine, expire_on_commit=False) as session:
       return session.query(AgentRedemption).filter(
         AgentRedemption.agent_address == agent_vault and
         AgentRedemption.is_transfer_to_core_vault == True and
         AgentRedemption.final_state == None
+      ).all()
+
+  def open_core_vault_returns(self, agent_vault: str) -> List[ReturnFromCoreVault]:
+    with Session(self.engint, expire_on_commit=False) as session:
+      return session.query(ReturnFromCoreVault).filter(
+        ReturnFromCoreVault.agent_address == agent_vault,
+        ReturnFromCoreVault.state == None
       )

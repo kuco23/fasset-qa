@@ -1,7 +1,7 @@
 from .utils import cached, Singleton
 from .components.database import DatabaseManager
 from .components.chain import ChainClient, AssetManager
-from .components.cmd import AgentBotCli, UserBotCli, AgentRunCli
+from .components.cmd import AgentBotCli, UserBotCli
 from .components.params import ParamLoader
 from .components.logic import AgentLogic
 
@@ -60,15 +60,6 @@ class Context(metaclass=Singleton):
       self.params.user_bot_cli_path,
       self.params.fasset,
       self.params.user_bot_env
-    )
-
-  @property
-  @cached
-  def run_agent(self):
-    return AgentRunCli(
-      self.params.run_dir,
-      self.params.agent_run_cli_path,
-      self.params.agent_bot_env
     )
 
   @property

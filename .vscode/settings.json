@@ -3,5 +3,9 @@
         "editor.tabSize": 2,
         "editor.defaultFormatter": "ms-python.black-formatter",
         "python.analysis.typeCheckingMode": "basic"
-    }
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/fasset-bots": true
+      }
 }
