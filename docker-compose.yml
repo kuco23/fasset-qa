@@ -1,0 +1,16 @@
+services:
+  core-vault-management:
+    image: ${CI_REGISTRY_IMAGE}:${DEPLOY_IMAGE_TAG}
+    network_mode: host
+    command: ["python", "-u", "-m", "run.py"]
+    restart: unless-stopped
+    environment:
+      DB_TYPE: ${DB_TYPE}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      RPC_URL: ${RPC_URL}
+      RPC_API_KEY: ${RPC_API_KEY}
+      NODE_PATH: /usr/local/bin/node

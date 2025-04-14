@@ -4,8 +4,8 @@ from .._parser import CmdParser
 
 
 class UserBotCliOutputParser(CmdParser):
-  _user_minted_re_1 = 'Paying on the underlying chain for reservation (\d+?) to address (r[\w\d]+?)\.\.\.'
-  _user_minted_re_2 = 'Waiting for proof of underlying payment transaction ([\w\d]+?)\.\.\.'
+  _user_minted_re_1 = r'Paying on the underlying chain for reservation (\d+?) to address (r[\w\d]+?)\.\.\.'
+  _user_minted_re_2 = r'Waiting for proof of underlying payment transaction ([\w\d]+?)\.\.\.'
   _user_minted_re_match = 'Done'
 
   def parse_user_mint(self, msg: str) -> ParserOutput:

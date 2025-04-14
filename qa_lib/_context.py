@@ -47,6 +47,7 @@ class Context(metaclass=Singleton):
   def agent_bot(self):
     return AgentBotCli(
       self.params.run_dir,
+      self.params.node_path,
       self.params.agent_bot_cli_path,
       self.params.fasset,
       self.params.agent_bot_env
@@ -57,6 +58,7 @@ class Context(metaclass=Singleton):
   def user_bot(self):
     return UserBotCli(
       self.params.run_dir,
+      self.params.node_path,
       self.params.user_bot_cli_path,
       self.params.fasset,
       self.params.user_bot_env

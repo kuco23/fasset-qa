@@ -3,9 +3,9 @@ from re import findall
 
 
 class CmdParser:
-  _hex_address_re = '0x[a-fA-F\d]{40}'
-  _decimal_num_re = '\d*\.\d*'
-  _integer_re = '\d+'
+  _hex_address_re = r'0x[a-fA-F\d]{40}'
+  _decimal_num_re = r'\d*\.\d*'
+  _integer_re = r'\d+'
 
   @staticmethod
   def _ensure_parser_response(output: str) -> object:

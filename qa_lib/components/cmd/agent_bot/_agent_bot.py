@@ -5,10 +5,11 @@ from .._cmd import Cmd
 
 class AgentBotCli(Cmd, AgentBotCliOutputParser):
 
-  def __init__(self, run_dir: str, agent_bot_executable: str, fasset: str, env: dict[str, str]):
+  def __init__(self, run_dir: str, node_path: str, agent_bot_executable: str, fasset: str, env: dict[str, str]):
     super().__init__(run_dir, env)
-    self.fasset = fasset
+    self.node_path = node_path
     self.agent_bot_executable = agent_bot_executable
+    self.fasset = fasset
 
   def create_agent(self, agent_settings_path: str) -> str:
     raw = self.run(['create', agent_settings_path])
@@ -37,5 +38,5 @@ class AgentBotCli(Cmd, AgentBotCliOutputParser):
 
   def run(self, commands: List[str]):
     commands.extend(['-f', self.fasset])
-    return super().run('node', self.agent_bot_executable, commands)
+    return super().run(self.node_path, self.agent_bot_executable, commands)
 

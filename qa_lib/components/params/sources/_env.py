@@ -42,6 +42,10 @@ class Env:
   def rpc_api_key(self) -> str:
     return environ.get('RPC_API_KEY')
 
+  @property
+  def node_path(self) -> str:
+    return self._required('NODE_PATH')
+
   @staticmethod
   def _required(name: str) -> str:
     var = environ.get(name)

@@ -3,13 +3,13 @@ from ....utils import ParserOutput
 
 
 class AgentBotCliOutputParser(CmdParser):
-  _agent_created_re = f'AGENT CREATED: Agent ({CmdParser._hex_address_re}) was created.'
+  _agent_created_re = rf'AGENT CREATED: Agent ({CmdParser._hex_address_re}) was created.'
   _deposit_collaterals_re = (
-    f'VAULT COLLATERAL DEPOSIT: Deposit of ({CmdParser._decimal_num_re}) (.+?) vault collateral tokens to agent ({CmdParser._hex_address_re}) was successful.\n'
-    f'BUY POOL TOKENS: Agent ({CmdParser._hex_address_re}) bought ({CmdParser._decimal_num_re}) (.+?) worth of pool tokens successfully.'
+    rf'VAULT COLLATERAL DEPOSIT: Deposit of ({CmdParser._decimal_num_re}) (.+?) vault collateral tokens to agent ({CmdParser._hex_address_re}) was successful.\n'
+    rf'BUY POOL TOKENS: Agent ({CmdParser._hex_address_re}) bought ({CmdParser._decimal_num_re}) (.+?) worth of pool tokens successfully.'
   )
-  _enter_available_re = f'AGENT ENTERED AVAILABLE: Agent ({CmdParser._hex_address_re}) entered available list'
-  _transfer_to_core_vault_re = f'TRANSFER TO CORE VAULT STARTED: Transfer to core vault ({CmdParser._integer_re}) started for ({CmdParser._hex_address_re})'
+  _enter_available_re = rf'AGENT ENTERED AVAILABLE: Agent ({CmdParser._hex_address_re}) entered available list'
+  _transfer_to_core_vault_re = rf'TRANSFER TO CORE VAULT STARTED: Transfer to core vault ({CmdParser._integer_re}) started for ({CmdParser._hex_address_re})'
 
   def parse_agent_creation(self, msg: str) -> ParserOutput:
     parsed = self._standardize_regex_output([self._agent_created_re], msg)
