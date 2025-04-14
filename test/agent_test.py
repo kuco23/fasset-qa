@@ -20,5 +20,5 @@ mint = context.user_bot.mint(7, addr)
 print(mint) """
 
 #max_trcv, _ = context.asset_manager.maximum_transfer_to_core_vault(addr)
-""" trcv = context.agent_bot.transfer_to_core_vault('0x2087Bc949Fa84D0628E62e36c38d250E63c2A947', 90)
-print(trcv) """
+#rcv = context.asset_manager.maximum_transfer_to_core_vault('0xC2C745DcEB7041520d8983397A42d4e116BC792C')
+#print(rcv)

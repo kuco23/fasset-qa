@@ -45,4 +45,4 @@ class Constants:
 
   @property
   def token_decimals(self) -> int:
-    return 1000000
+    return 6

@@ -1,6 +1,4 @@
-from typing import List
-from datetime import datetime, timedelta, timezone
-from ...components.database._entities import AgentRedemption, ReturnFromCoreVault
+from typing import Tuple
 from ..params import ParamLoader
 from ..database import DatabaseManager
 from ..chain import AssetManager
@@ -8,8 +6,7 @@ from ..cmd import AgentBotCli
 
 
 MINTED_UBA_CORE_VAULT_TRANSFER_THRESHOLD_RATIO = 0.75
-MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO = 0.
-MIN_CORE_VAULT_OPERATION_CYCLE_SECONDS = 120
+MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO = 0.25
 
 class AgentLogic:
 
@@ -27,35 +24,34 @@ class AgentLogic:
         self.agent_bot.make_agent_available(agent_vault)
 
   def transfer_to_core_vault_if_makes_sense(self, agent_vault: str):
-    transfer_open = self.agent_has_open_transfer_to_core_vault(agent_vault)
-    if not transfer_open: return
+    transfer_open = self.agent_has_open_transfer_to_core_vault_requests(agent_vault)
+    if transfer_open: return
     optimal_transfer_to_core_vault_uba = self.optimal_agent_transfer_to_core_vault_uba(agent_vault)
     if optimal_transfer_to_core_vault_uba > 0:
       optimal_transfer_to_core_vault_tok = self.uba_to_tokens(optimal_transfer_to_core_vault_uba)
-      print(f'transferring {optimal_transfer_to_core_vault_tok} {self.params.fasset} to core vault for agent {agent_vault}')
+      print(f'transferring {optimal_transfer_to_core_vault_tok} {self.params.fasset} to core vault for agent vault {agent_vault}')
       self.agent_bot.transfer_to_core_vault(agent_vault, optimal_transfer_to_core_vault_tok)
 
   def return_from_core_vault_if_makes_sense(self, agent_vault: str):
-    return_open = self.agent_has_open_return_from_core_vault(agent_vault)
-    if not return_open: return
+    return_open = self.agent_has_open_return_from_core_vault_requests(agent_vault)
+    if return_open: return
     optimal_return_from_core_vault_uba = self.optimal_agent_return_from_core_vault_uba(agent_vault)
     optimal_return_from_core_vault_lots = self.uba_to_lots(optimal_return_from_core_vault_uba)
     if optimal_return_from_core_vault_lots > 0:
-      print(f'returning {optimal_return_from_core_vault_lots} lots of {self.params.fasset} from core vault for agent {agent_vault}')
+      print(f'returning {optimal_return_from_core_vault_lots} lots of {self.params.fasset} from core vault for agent vault {agent_vault}')
       self.agent_bot.return_from_core_vault(agent_vault, optimal_return_from_core_vault_lots)
 
   def optimal_agent_transfer_to_core_vault_uba(self, agent_vault: str) -> int:
     """Define the optimal value to transfer to core vault for the given agent"""
     agent_info = self.asset_manager.agent_info(agent_vault)
-    minted_uba = agent_info['mintedUBA']
-    free_lots = agent_info['freeCollateralLots']
-    free_uba = free_lots * self.params.lot_size
+    minted_uba, free_uba = self.get_agent_minted_and_free_uba(agent_info)
+
     total_uba = free_uba + minted_uba
     if total_uba == 0: return 0
-
     minted_ratio = minted_uba / total_uba
+
     if minted_ratio > MINTED_UBA_CORE_VAULT_TRANSFER_THRESHOLD_RATIO:
-      _, max_transfer  = self.asset_manager.maximum_transfer_to_core_vault(agent_vault)
+      max_transfer, _  = self.asset_manager.maximum_transfer_to_core_vault(agent_vault)
       return max_transfer
 
     return 0
@@ -63,34 +59,34 @@ class AgentLogic:
   def optimal_agent_return_from_core_vault_uba(self, agent_vault: str):
     """Define the optimal value to return from core vault for the given agent"""
     agent_info = self.asset_manager.agent_info(agent_vault)
-    minted_uba = agent_info['mintedUBA']
-    free_lots = agent_info['freeCollateralLots']
-    free_uba = free_lots * self.params.lot_size
+    minted_uba, free_uba = self.get_agent_minted_and_free_uba(agent_info)
+
     total_uba = free_uba + minted_uba
     if total_uba == 0: return 0
-
     minted_ratio = minted_uba / total_uba
+
     if minted_ratio < MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO:
       _, core_vault_balance = self.asset_manager.core_vault_available_amount()
       return min(core_vault_balance, free_uba)
 
     return 0
 
-  def agent_has_open_transfer_to_core_vault(self, agent_vault: str):
-    requests = self.database.open_core_vault_transfers(agent_vault)
-    return len(self.filter_out_late_entries(requests)) > 0
+  def get_agent_minted_and_free_uba(self, agent_info) -> Tuple[int, int]:
+    minted_uba = agent_info['mintedUBA']
+    free_lots = agent_info['freeCollateralLots']
+    free_uba = free_lots * self.params.lot_size
+    return minted_uba, free_uba
 
-  def agent_has_open_return_from_core_vault(self, agent_vault: str):
+  def agent_has_open_transfer_to_core_vault_requests(self, agent_vault: str):
+    requests = self.database.open_core_vault_transfers(agent_vault)
+    return len(requests) > 0
+
+  def agent_has_open_return_from_core_vault_requests(self, agent_vault: str):
     requests = self.database.open_core_vault_returns(agent_vault)
-    return len(self.filter_out_late_entries(requests)) > 0
+    return len(requests) > 0
 
   def uba_to_tokens(self, amount: int) -> float:
     return amount / 10 ** self.params.token_decimals
 
   def uba_to_lots(self, amount: int) -> int:
     return amount // self.params.lot_size
-
-  def filter_out_late_entries(self, requests: List[ReturnFromCoreVault | AgentRedemption]):
-    min_time = datetime.now() + timedelta(seconds=MIN_CORE_VAULT_OPERATION_CYCLE_SECONDS)
-    min_time = min_time.replace(tzinfo=timezone.utc)
-    return list(filter(lambda r: min_time <= r.created_at, requests))

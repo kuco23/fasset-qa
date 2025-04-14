@@ -9,7 +9,7 @@ class CmdParser:
 
   @staticmethod
   def _ensure_parser_response(output: str) -> object:
-    assert not output.err, f'could not parse {output.origin}'
+    assert not output.err, f'could not parse:\n{output.origin}'
     return output.resp
 
   @classmethod

@@ -1,6 +1,6 @@
 def cached(fun):
   def modifier(self):
-    name = '_' + fun.__name__
+    name = '__' + fun.__name__
     if getattr(self, name, None) is None:
       setattr(self, name, fun(self))
     return getattr(self, name)

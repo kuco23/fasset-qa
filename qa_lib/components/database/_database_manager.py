@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import create_engine, URL
+from sqlalchemy import create_engine, URL, or_
 from sqlalchemy.orm import Session
 from sqlalchemy_utils import database_exists, create_database
 from ._entities import Agent, AgentRedemption, ReturnFromCoreVault
@@ -28,12 +28,9 @@ class DatabaseManager:
     with Session(self.engine, expire_on_commit=False) as session:
       return session.query(ReturnFromCoreVault).filter(
         ReturnFromCoreVault.agent_address == agent_vault,
-        ReturnFromCoreVault.state != 'Done',
-        ReturnFromCoreVault.cancelled == False
-      )
-
-  def get(self, agent_vault: str) -> List[AgentRedemption]:
-    with Session(self.engine, expire_on_commit=False) as session:
-      return session.query(AgentRedemption).filter(
-        AgentRedemption.agent_address == agent_vault
+        ReturnFromCoreVault.state != 'done',
+        or_(
+          ReturnFromCoreVault.cancelled.is_(None),
+          ReturnFromCoreVault.cancelled == False
+        )
       ).all()
