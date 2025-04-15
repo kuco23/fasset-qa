@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.13-nodejs23 AS base
+FROM nikolaik/python-nodejs:python3.13-nodejs18 AS base
 
 # Setup env
 ENV LANG=C.UTF-8
@@ -24,5 +24,15 @@ COPY --from=python-deps /.venv /.venv
 ENV PATH="/.venv/bin:$PATH"
 
 # Install application into container
-WORKDIR /app
 COPY . /app
+
+# Initialize and update submodules
+WORKDIR /app/fasset-bots
+RUN git submodule update --init --recursive
+
+# Build the submodule
+RUN yarn install
+RUN yarn clean
+RUN yarn build
+
+WORKDIR /app
