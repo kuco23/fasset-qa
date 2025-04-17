@@ -46,6 +46,22 @@ class Env:
   def node_path(self) -> str:
     return self._required('NODE_PATH')
 
+  @property
+  def fasset_bot_config_path(self) -> str:
+    return self._required('FASSET_BOT_CONFIG')
+
+  @property
+  def fasset_bot_secrets_path(self) -> str:
+    return self._required('FASSET_BOT_SECRETS')
+
+  @property
+  def fasset_user_config_path(self) -> str:
+    return self._required('FASSET_USER_CONFIG')
+
+  @property
+  def fasset_user_secrets_path(self) -> str:
+    return self._required('FASSET_USER_SECRETS')
+
   @staticmethod
   def _required(name: str) -> str:
     var = environ.get(name)

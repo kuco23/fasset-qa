@@ -18,20 +18,6 @@ class Constants:
   def agent_run(self) -> str:
     return './fasset-bots/packages/fasset-bots-cli/dist/src/run/run-agent'
 
-  @property
-  def agent_bot_env(self) -> dict[str, str]:
-    return {
-      'FASSET_BOT_CONFIG': './config/config.json',
-      'FASSET_BOT_SECRETS': './config/secrets.json'
-    }
-
-  @property
-  def user_bot_env(self) -> dict[str, str]:
-    return {
-      'FASSET_USER_CONFIG': './config/config.json',
-      'FASSET_USER_SECRETS': './config/secrets.json'
-    }
-
   ##########################################################
   # should be configured dynamicaly
 

@@ -7,6 +7,7 @@ from ..cmd import AgentBotCli
 
 MINTED_UBA_CORE_VAULT_TRANSFER_THRESHOLD_RATIO = 0.75
 MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO = 0.25
+MAX_FREE_LOTS_FACTOR_TO_RETURN_FROM_CORE_VAULT = 0.5
 
 class AgentLogic:
 
@@ -67,7 +68,8 @@ class AgentLogic:
 
     if minted_ratio < MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO:
       _, core_vault_balance = self.asset_manager.core_vault_available_amount()
-      return min(core_vault_balance, free_uba)
+      max_returned_uba = int(free_uba / MAX_FREE_LOTS_FACTOR_TO_RETURN_FROM_CORE_VAULT)
+      return min(core_vault_balance, max_returned_uba)
 
     return 0
 

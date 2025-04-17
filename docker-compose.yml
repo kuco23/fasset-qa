@@ -14,3 +14,12 @@ services:
       RPC_URL: ${RPC_URL}
       RPC_API_KEY: ${RPC_API_KEY}
       NODE_PATH: /usr/local/bin/node
+      FASSET_BOT_CONFIG: /var/config.bot.json
+      FASSET_USER_CONFIG: /var/config.user.json
+      FASSET_BOT_SECRETS: /var/secrets.bot.json
+      FASSET_USER_SECRETS: /var/secrets.user.json
+    volumes:
+      - ${FASSET_BOT_CONFIG}:/var/config.bot.json
+      - ${FASSET_USER_CONFIG}:/var/config.user.json
+      - ${FASSET_BOT_SECRETS}:/var/secrets.bot.json
+      - ${FASSET_USER_SECRETS}:/var/secrets.user.json
