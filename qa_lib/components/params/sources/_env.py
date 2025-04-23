@@ -62,6 +62,10 @@ class Env:
   def fasset_user_secrets_path(self) -> str:
     return self._required('FASSET_USER_SECRETS')
 
+  @property
+  def config_path(self) -> str:
+    return environ.get('CONFIG') or './config.toml'
+
   @staticmethod
   def _required(name: str) -> str:
     var = environ.get(name)

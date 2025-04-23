@@ -1,0 +1,11 @@
+[contracts]
+path = './fasset-bots/packages/fasset-bots-core/fasset-deployment/coston.json'
+asset_manager_abi = './fasset-bots/packages/fasset-bots-core/artifacts/contracts/userInterfaces/IAssetManager.sol/IAssetManager.json'
+
+[core_vault_manager]
+# transfer to core vault when higher than minted_uba / total_uba
+minted_uba_core_vault_tranfer_threshold_ratio = 0.75
+# return from core vault when lower than minted_uba / total_uba
+minted_uba_core_vault_return_threshold_ratio = 0.25
+# returning from core vault multiplier
+max_free_lots_factor_to_return_from_core_vault = 0.5

@@ -2,7 +2,7 @@ services:
   core-vault-management:
     image: ${CI_REGISTRY_IMAGE}:${DEPLOY_IMAGE_TAG}
     network_mode: host
-    command: ["python", "-u", "-m", "run.py"]
+    command: ["bash", "entrypoint.sh", "run"]
     restart: unless-stopped
     environment:
       DB_TYPE: ${DB_TYPE}
@@ -14,12 +14,14 @@ services:
       RPC_URL: ${RPC_URL}
       RPC_API_KEY: ${RPC_API_KEY}
       NODE_PATH: /usr/local/bin/node
-      FASSET_BOT_CONFIG: /var/config.bot.json
-      FASSET_USER_CONFIG: /var/config.user.json
-      FASSET_BOT_SECRETS: /var/secrets.bot.json
-      FASSET_USER_SECRETS: /var/secrets.user.json
+      FASSET_BOT_CONFIG: /var/fasset/config.bot.json
+      FASSET_BOT_SECRETS: /var/fasset/secrets.bot.json
+      FASSET_USER_CONFIG: /var/fasset/config.user.json
+      FASSET_USER_SECRETS: /var/fasset/secrets.user.json
+      CONFIG: /app/config.toml
     volumes:
-      - ${FASSET_BOT_CONFIG}:/var/config.bot.json
-      - ${FASSET_USER_CONFIG}:/var/config.user.json
-      - ${FASSET_BOT_SECRETS}:/var/secrets.bot.json
-      - ${FASSET_USER_SECRETS}:/var/secrets.user.json
+      - ${FASSET_BOT_CONFIG}:/var/fasset/config.bot.json
+      - ${FASSET_BOT_SECRETS}:/var/fasset/secrets.bot.json
+      - ${FASSET_USER_CONFIG}:/var/fasset/config.user.json
+      - ${FASSET_BOT_SECRETS}:/var/fasset/secrets.user.json
+      - ${CONFIG}:/app/config.toml

@@ -9,6 +9,7 @@ sqlalchemy = "2.0.40"
 sqlalchemy-utils = "0.41.2"
 psycopg2-binary = "2.9.10"
 web3 = "7.10.0"
+toml = "0.10.2"
 
 [scripts]
 main = "python main.py"

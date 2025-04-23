@@ -68,7 +68,7 @@ class AgentLogic:
 
     if minted_ratio < MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO:
       _, core_vault_balance = self.asset_manager.core_vault_available_amount()
-      max_returned_uba = int(free_uba / MAX_FREE_LOTS_FACTOR_TO_RETURN_FROM_CORE_VAULT)
+      max_returned_uba = int(free_uba * MAX_FREE_LOTS_FACTOR_TO_RETURN_FROM_CORE_VAULT)
       return min(core_vault_balance, max_returned_uba)
 
     return 0
@@ -85,6 +85,7 @@ class AgentLogic:
 
   def agent_has_open_return_from_core_vault_requests(self, agent_vault: str):
     requests = self.database.open_core_vault_returns(agent_vault)
+    print(requests)
     return len(requests) > 0
 
   def uba_to_tokens(self, amount: int) -> float:

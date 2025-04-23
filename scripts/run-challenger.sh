@@ -1,1 +1,1 @@
-node ./fasset-bots/packages/fasset-bots-cli/dist/src/run/run-challenger -c ./config/config.json -s ./config/secrets.json
+node ./fasset-bots/packages/fasset-bots-cli/dist/src/run/run-challenger -c ./fasset-bots-config/config.json -s ./fasset-bots-config/secrets.json
