@@ -1,5 +1,6 @@
 services:
   core-vault-management:
+    container_name: ${COMPOSE_PROJECT_NAME}
     image: ${CI_REGISTRY_IMAGE}:${DEPLOY_IMAGE_TAG}
     network_mode: host
     command: ["bash", "entrypoint.sh", "run"]

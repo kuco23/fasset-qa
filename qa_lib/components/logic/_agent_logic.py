@@ -85,7 +85,6 @@ class AgentLogic:
 
   def agent_has_open_return_from_core_vault_requests(self, agent_vault: str):
     requests = self.database.open_core_vault_returns(agent_vault)
-    print(requests)
     return len(requests) > 0
 
   def uba_to_tokens(self, amount: int) -> float:

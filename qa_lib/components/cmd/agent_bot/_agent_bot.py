@@ -34,7 +34,7 @@ class AgentBotCli(Cmd, AgentBotCliOutputParser):
 
   def return_from_core_vault(self, agent_vault: str, amount: int):
     resp = self.run(['returnFromCoreVault', agent_vault, str(amount)])
-    print(resp)
+    print('return from core vault resp', resp)
 
   def run(self, commands: List[str]):
     commands.extend(['-f', self.fasset])
