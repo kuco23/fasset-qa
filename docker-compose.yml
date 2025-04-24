@@ -23,5 +23,5 @@ services:
       - ${FASSET_BOT_CONFIG}:/var/fasset/config.bot.json
       - ${FASSET_BOT_SECRETS}:/var/fasset/secrets.bot.json
       - ${FASSET_USER_CONFIG}:/var/fasset/config.user.json
-      - ${FASSET_BOT_SECRETS}:/var/fasset/secrets.user.json
+      - ${FASSET_USER_SECRETS}:/var/fasset/secrets.user.json
       - ${CONFIG}:/app/config.toml
