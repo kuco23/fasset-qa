@@ -23,4 +23,4 @@ print(mint) """
 #rcv = context.asset_manager.maximum_transfer_to_core_vault('0xC2C745DcEB7041520d8983397A42d4e116BC792C')
 #print(rcv)
 
-print(context.agent_logic.optimal_agent_return_from_core_vault_uba('0x3c831Fe4417bEFFAc721d24996985eE2dd627053'))
+#print(context.agent_logic.optimal_agent_return_from_core_vault_uba('0x3c831Fe4417bEFFAc721d24996985eE2dd627053'))

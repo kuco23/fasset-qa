@@ -26,6 +26,24 @@ class ParamLoader(Constants, Config):
     return load(open(self.asset_manager_abi_path, 'r'))['abi']
 
   @property
+  @cached
+  def _fasset_abi(self):
+    return load(open(self.fasset_abi_path, 'r'))['abi']
+
+  @property
+  @cached
+  def user_secrets(self):
+    return load(open(self.fasset_user_secrets_path, 'r'))
+
+  @property
+  def user_native_address(self) -> str:
+    return self.user_secrets['user']['native']['address']
+
+  @property
+  def user_underlying_address(self) -> str:
+    return self.user_secrets['user'][self.asset_name]['address']
+
+  @property
   def agent_bot_env(self) -> dict[str, str]:
     return {
       'FASSET_BOT_CONFIG': self.fasset_bot_config_path,
@@ -38,4 +56,3 @@ class ParamLoader(Constants, Config):
       'FASSET_USER_CONFIG': self.fasset_user_config_path,
       'FASSET_USER_SECRETS': self.fasset_user_secrets_path
     }
-

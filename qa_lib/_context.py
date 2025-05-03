@@ -1,9 +1,9 @@
 from .utils import cached, Singleton
 from .components.database import DatabaseManager
-from .components.chain import ChainClient, AssetManager
+from .components.chain import ChainClient, AssetManager, FAsset
 from .components.cmd import AgentBotCli, UserBotCli
 from .components.params import ParamLoader
-from .components.logic import AgentLogic
+from .components.logic import AgentCoreVaultInteracter, UserCoreVaultRedeemerer
 
 
 class Context(metaclass=Singleton):
@@ -44,12 +44,21 @@ class Context(metaclass=Singleton):
 
   @property
   @cached
+  def fasset(self):
+    return FAsset(
+      self.chain_client,
+      self.params._fasset_abi,
+      self.params.get_address('FTestXRP')
+    )
+
+  @property
+  @cached
   def agent_bot(self):
     return AgentBotCli(
       self.params.run_dir,
       self.params.node_path,
       self.params.agent_bot_cli_path,
-      self.params.fasset,
+      self.params.fasset_name,
       self.params.agent_bot_env
     )
 
@@ -60,16 +69,26 @@ class Context(metaclass=Singleton):
       self.params.run_dir,
       self.params.node_path,
       self.params.user_bot_cli_path,
-      self.params.fasset,
+      self.params.fasset_name,
       self.params.user_bot_env
     )
 
   @property
   @cached
-  def agent_logic(self):
-    return AgentLogic(
+  def agent_core_vault_interact(self):
+    return AgentCoreVaultInteracter(
       self.params,
       self.database_manager,
       self.asset_manager,
       self.agent_bot
+    )
+
+  @property
+  @cached
+  def user_core_vault_redeemer(self):
+    return UserCoreVaultRedeemerer(
+      self.params,
+      self.fasset,
+      self.asset_manager,
+      self.user_bot
     )

@@ -14,6 +14,10 @@ class Config(Env):
     return self._config['contracts']['asset_manager_abi']
 
   @property
+  def fasset_abi_path(self):
+    return self._config['contracts']['fasset_abi']
+
+  @property
   def minted_uba_core_vault_tranfer_threshold_ratio(self):
     return self._config['core_vault_manager']['minted_uba_core_vault_tranfer_threshold_ratio']
 

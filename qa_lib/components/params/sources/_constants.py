@@ -22,8 +22,12 @@ class Constants:
   # should be configured dynamicaly
 
   @property
-  def fasset(self) -> str:
+  def fasset_name(self) -> str:
     return 'FTestXRP'
+
+  @property
+  def asset_name(self) -> str:
+    return 'testXRP'
 
   @property
   def lot_size(self) -> int:
@@ -32,3 +36,7 @@ class Constants:
   @property
   def token_decimals(self) -> int:
     return 6
+
+  @property
+  def core_vault_min_redeem_lots(self) -> int:
+    return 10

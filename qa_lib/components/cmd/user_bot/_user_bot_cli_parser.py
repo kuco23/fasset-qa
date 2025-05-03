@@ -2,11 +2,11 @@ from re import search
 from ....utils import ParserOutput
 from .._parser import CmdParser
 
-
 class UserBotCliOutputParser(CmdParser):
   _user_minted_re_1 = r'Paying on the underlying chain for reservation (\d+?) to address (r[\w\d]+?)\.\.\.'
   _user_minted_re_2 = r'Waiting for proof of underlying payment transaction ([\w\d]+?)\.\.\.'
   _user_minted_re_match = 'Done'
+  _user_redeem_from_core_vault = r'Asked for redemption of (\d+?) from core vault.'
 
   def parse_user_mint(self, msg: str) -> ParserOutput:
     done = search(self._user_minted_re_match, msg)
@@ -18,4 +18,12 @@ class UserBotCliOutputParser(CmdParser):
       'mint_id': int(mint_id),
       'agent_address': agent_address,
       'tx_hash': tx_hash
+    }, origin=msg, err=False)
+
+  def parse_user_redeem_from_core_vault(self, msg: str) -> ParserOutput:
+    parses = self._standardize_regex_output([self._user_redeem_from_core_vault], msg)
+    if len(parses) != 1:
+      return ParserOutput(resp=dict(), origin=msg, err=True)
+    return ParserOutput(resp={
+      'lots': int(parses[0])
     }, origin=msg, err=False)

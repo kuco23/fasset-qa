@@ -46,7 +46,6 @@ COPY --from=submodule /app/fasset-bots ./fasset-bots
 
 # Copy python executables
 COPY --from=build /app/qa_lib/ ./qa_lib/
-COPY --from=build /app/run/ ./run/
 COPY --from=build /app/run.py ./run.py
 
 COPY entrypoint.sh ./entrypoint.sh

@@ -1,6 +1,7 @@
 [contracts]
 path = './fasset-bots/packages/fasset-bots-core/fasset-deployment/coston.json'
 asset_manager_abi = './fasset-bots/packages/fasset-bots-core/artifacts/contracts/userInterfaces/IAssetManager.sol/IAssetManager.json'
+fasset_abi = './fasset-bots/packages/fasset-bots-core/artifacts/contracts/userInterfaces/IFAsset.sol/IFAsset.json'
 
 [core_vault_manager]
 # transfer to core vault when higher than minted_uba / total_uba

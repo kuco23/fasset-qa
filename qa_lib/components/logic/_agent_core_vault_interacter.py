@@ -5,11 +5,7 @@ from ..chain import AssetManager
 from ..cmd import AgentBotCli
 
 
-MINTED_UBA_CORE_VAULT_TRANSFER_THRESHOLD_RATIO = 0.75
-MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO = 0.25
-MAX_FREE_LOTS_FACTOR_TO_RETURN_FROM_CORE_VAULT = 0.5
-
-class AgentLogic:
+class AgentCoreVaultInteracter:
 
   def __init__(self, params: ParamLoader, database: DatabaseManager, asset_manager: AssetManager, agent_bot: AgentBotCli):
     self.params = params
@@ -30,7 +26,7 @@ class AgentLogic:
     optimal_transfer_to_core_vault_uba = self.optimal_agent_transfer_to_core_vault_uba(agent_vault)
     if optimal_transfer_to_core_vault_uba > 0:
       optimal_transfer_to_core_vault_tok = self.uba_to_tokens(optimal_transfer_to_core_vault_uba)
-      print(f'transferring {optimal_transfer_to_core_vault_tok} {self.params.fasset} to core vault for agent vault {agent_vault}')
+      print(f'transferring {optimal_transfer_to_core_vault_tok} {self.params.fasset_name} to core vault for agent vault {agent_vault}')
       self.agent_bot.transfer_to_core_vault(agent_vault, optimal_transfer_to_core_vault_tok)
 
   def return_from_core_vault_if_makes_sense(self, agent_vault: str):
@@ -39,7 +35,7 @@ class AgentLogic:
     optimal_return_from_core_vault_uba = self.optimal_agent_return_from_core_vault_uba(agent_vault)
     optimal_return_from_core_vault_lots = self.uba_to_lots(optimal_return_from_core_vault_uba)
     if optimal_return_from_core_vault_lots > 0:
-      print(f'returning {optimal_return_from_core_vault_lots} lots of {self.params.fasset} from core vault for agent vault {agent_vault}')
+      print(f'returning {optimal_return_from_core_vault_lots} lots of {self.params.fasset_name} from core vault for agent vault {agent_vault}')
       self.agent_bot.return_from_core_vault(agent_vault, optimal_return_from_core_vault_lots)
 
   def optimal_agent_transfer_to_core_vault_uba(self, agent_vault: str) -> int:
@@ -51,7 +47,7 @@ class AgentLogic:
     if total_uba == 0: return 0
     minted_ratio = minted_uba / total_uba
 
-    if minted_ratio > MINTED_UBA_CORE_VAULT_TRANSFER_THRESHOLD_RATIO:
+    if minted_ratio > self.params.minted_uba_core_vault_return_threshold_ratio:
       max_transfer, _  = self.asset_manager.maximum_transfer_to_core_vault(agent_vault)
       return max_transfer
 
@@ -66,9 +62,9 @@ class AgentLogic:
     if total_uba == 0: return 0
     minted_ratio = minted_uba / total_uba
 
-    if minted_ratio < MINTED_UBA_CORE_VAULT_RETURN_THRESHOLD_RATIO:
+    if minted_ratio < self.params.minted_uba_core_vault_return_threshold_ratio:
       _, core_vault_balance = self.asset_manager.core_vault_available_amount()
-      max_returned_uba = int(free_uba * MAX_FREE_LOTS_FACTOR_TO_RETURN_FROM_CORE_VAULT)
+      max_returned_uba = int(free_uba * self.params.max_free_lots_factor_to_return_from_core_vault)
       return min(core_vault_balance, max_returned_uba)
 
     return 0
