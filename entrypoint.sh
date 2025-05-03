@@ -1,6 +1,6 @@
 #!/bin/sh
 
-hown -R 0:0 /var/fasset/secrets.bot.json
+chown -R 0:0 /var/fasset/secrets.bot.json
 chown -R 0:0 /var/fasset/secrets.user.json
 
 case $1 in
