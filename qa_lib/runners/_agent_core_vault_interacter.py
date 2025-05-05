@@ -12,7 +12,7 @@ class AgentCoreVaultHandler:
   def run(self):
     while True:
       self.run_step()
-      sleep(RUN_CYCLE_SLEEP_SECONDS)
+      sleep(self.context.params.core_vault_interacter_bot_sleep_cycle)
 
   def run_step(self):
     agents = self.context.database_manager.fetch_agents()

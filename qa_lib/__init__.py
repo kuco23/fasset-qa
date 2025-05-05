@@ -1,3 +1,3 @@
 from ._context import Context, ParamLoader
-from .runners._agent_core_vault_handler import AgentCoreVaultHandler
+from .runners._agent_core_vault_interacter import AgentCoreVaultHandler
 from .runners._user_core_vault_redeemer import UserCoreVaultRedeemer

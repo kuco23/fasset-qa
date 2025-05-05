@@ -21,8 +21,7 @@ class AgentCoreVaultInteracter:
         self.agent_bot.make_agent_available(agent_vault)
 
   def transfer_to_core_vault_if_makes_sense(self, agent_vault: str):
-    transfer_open = self.agent_has_open_transfer_to_core_vault_requests(agent_vault)
-    if transfer_open: return
+    if self.agent_has_open_transfer_to_core_vault_requests(agent_vault): return
     optimal_transfer_to_core_vault_uba = self.optimal_agent_transfer_to_core_vault_uba(agent_vault)
     if optimal_transfer_to_core_vault_uba > 0:
       optimal_transfer_to_core_vault_tok = self.uba_to_tokens(optimal_transfer_to_core_vault_uba)
@@ -30,8 +29,7 @@ class AgentCoreVaultInteracter:
       self.agent_bot.transfer_to_core_vault(agent_vault, optimal_transfer_to_core_vault_tok)
 
   def return_from_core_vault_if_makes_sense(self, agent_vault: str):
-    return_open = self.agent_has_open_return_from_core_vault_requests(agent_vault)
-    if return_open: return
+    if self.agent_has_open_return_from_core_vault_requests(agent_vault): return
     optimal_return_from_core_vault_uba = self.optimal_agent_return_from_core_vault_uba(agent_vault)
     optimal_return_from_core_vault_lots = self.uba_to_lots(optimal_return_from_core_vault_uba)
     if optimal_return_from_core_vault_lots > 0:

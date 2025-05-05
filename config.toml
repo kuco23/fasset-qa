@@ -10,3 +10,9 @@ minted_uba_core_vault_tranfer_threshold_ratio = 0.75
 minted_uba_core_vault_return_threshold_ratio = 0.25
 # returning from core vault multiplier
 max_free_lots_factor_to_return_from_core_vault = 0.5
+
+[core_vault_agent_interacter_bot]
+interact_cycle_sleep_seconds = 300
+
+[core_vault_redeemer_bot]
+interact_cycle_sleep_seconds = 300

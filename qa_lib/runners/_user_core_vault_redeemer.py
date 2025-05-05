@@ -2,7 +2,7 @@ from time import sleep
 from .._context import Context
 
 
-RUN_CYCLE_SLEEP_SECONDS = 60
+RUN_CYCLE_SLEEP_SECONDS = 300
 
 class UserCoreVaultRedeemer:
 
@@ -12,7 +12,7 @@ class UserCoreVaultRedeemer:
   def run(self):
     while True:
       self.run_step()
-      sleep(RUN_CYCLE_SLEEP_SECONDS)
+      sleep(self.context.params.core_vault_redeemer_bot_sleep_cycle)
 
   def run_step(self):
     try:

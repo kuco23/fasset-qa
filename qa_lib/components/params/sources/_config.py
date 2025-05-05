@@ -30,6 +30,14 @@ class Config(Env):
     return self._config['core_vault_manager']['max_free_lots_factor_to_return_from_core_vault']
 
   @property
+  def core_vault_interacter_bot_sleep_cycle(self):
+    return self._config['core_vault_agent_interacter_bot']['interact_cycle_sleep_seconds']
+
+  @property
+  def core_vault_redeemer_bot_sleep_cycle(self):
+    return self._config['core_vault_redeemer_bot']['interact_cycle_sleep_seconds']
+
+  @property
   @cached
   def _config(self):
     with open(self.config_path) as cfg:
