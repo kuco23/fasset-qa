@@ -1,45 +1,53 @@
 from toml import load
-from ._env import Env
-from ....utils import cached
+from pydantic.dataclasses import dataclass
+from dacite import from_dict
 
 
-class Config(Env):
+@dataclass
+class ConfigContracts:
+  path: str
+  asset_manager_abi: str
+  fasset_abi: str
 
-  @property
-  def contracts_path(self):
-    return self._config['contracts']['path']
+@dataclass
+class ConfigCoreVaultManager:
+  minted_uba_core_vault_tranfer_threshold_ratio: float
+  minted_uba_core_vault_return_threshold_ratio: float
+  max_free_lots_factor_to_return_from_core_vault: float
 
-  @property
-  def asset_manager_abi_path(self):
-    return self._config['contracts']['asset_manager_abi']
+@dataclass
+class ConfigCoreVaultRedeemerBot:
+  interact_cycle_sleep_seconds: int
 
-  @property
-  def fasset_abi_path(self):
-    return self._config['contracts']['fasset_abi']
+@dataclass
+class CoreVaultAgentInteracerBot:
+  interact_cycle_sleep_seconds: int
 
-  @property
-  def minted_uba_core_vault_tranfer_threshold_ratio(self):
-    return self._config['core_vault_manager']['minted_uba_core_vault_tranfer_threshold_ratio']
+@dataclass
+class ConfigLoadTest:
+  user_xrp_fund: int
+  user_nat_fund: int
+  fasset_user_config_file_path: str
+  fasset_user_secrets_file_path: str
 
-  @property
-  def minted_uba_core_vault_return_threshold_ratio(self):
-    return self._config['core_vault_manager']['minted_uba_core_vault_return_threshold_ratio']
+@dataclass
+class ConfigOs:
+  node_path: str
 
-  @property
-  def max_free_lots_factor_to_return_from_core_vault(self):
-    return self._config['core_vault_manager']['max_free_lots_factor_to_return_from_core_vault']
+@dataclass
+class Config:
+  contracts: ConfigContracts
+  core_vault_manager: ConfigCoreVaultManager
+  core_vault_redeemer_bot: ConfigCoreVaultRedeemerBot
+  core_vault_agent_interacter_bot: CoreVaultAgentInteracerBot
+  load_test: ConfigLoadTest
+  os: ConfigOs
 
-  @property
-  def core_vault_interacter_bot_sleep_cycle(self):
-    return self._config['core_vault_agent_interacter_bot']['interact_cycle_sleep_seconds']
+  @classmethod
+  def create(cls, config_path: str):
+    return from_dict(data_class=Config, data=cls._load_config_toml(config_path))
 
-  @property
-  def core_vault_redeemer_bot_sleep_cycle(self):
-    return self._config['core_vault_redeemer_bot']['interact_cycle_sleep_seconds']
-
-  @property
-  @cached
-  def _config(self):
-    with open(self.config_path) as cfg:
-      return load(cfg)
-
+  @staticmethod
+  def _load_config_toml(config_path: str):
+    with open(config_path, 'r') as f:
+      return load(f)

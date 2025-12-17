@@ -3,10 +3,8 @@ from time import sleep
 from .._dependency_manager import DependencyManager
 
 
-RUN_CYCLE_SLEEP_SECONDS = 300
-
 @attrs.frozen
-class UserCoreVaultRedeemer:
+class SimpleUser:
   context: DependencyManager
 
   def run(self):
@@ -17,7 +15,6 @@ class UserCoreVaultRedeemer:
   def run_step(self):
     try:
       print(f'checking whether user {self.context.params.user_native_address} can redeem with core vault')
-      self.context.user_core_vault_redeemer.mint_if_too_little_fassets()
-      self.context.user_core_vault_redeemer.redeem_from_core_vault_if_possible()
+      self.context.simple_user_bot.mint_or_redeem()
     except Exception as err:
       print(f'error running agent vault monitor due to {err}')

@@ -1,9 +1,9 @@
 from typing import Tuple
-from ._chain_client import ChainClient
+from ._native_client import NativeClient
 
 class AssetManager:
 
-  def __init__(self, client: ChainClient, abi: object, address: str):
+  def __init__(self, client: NativeClient, abi: object, address: str):
     self.contract = client.get_contract(abi, address)
 
   def core_vault_available_amount(self) -> Tuple[int, int]:

@@ -1,13 +1,14 @@
+from attrs import define, field
 from typing import List, Optional
 from subprocess import Popen, PIPE
 
 
+@define
 class Cmd:
-  process: Optional[Popen] = None
+  process: Optional[Popen] = field(default=None, init=False)
 
-  def __init__(self, cwd_path: str, env: dict[str, str]):
-    self.cwd_path = cwd_path
-    self.env = env
+  cwd_path: str
+  env: dict[str, str]
 
   def run(self, runner: str, executable: str, command: List[str]) -> str:
     self.process = self._execute(runner, executable, command)

@@ -1,13 +1,13 @@
+import attrs
 from time import sleep
-from .._context import Context
+from .._dependency_manager import DependencyManager
 
 
 RUN_CYCLE_SLEEP_SECONDS = 300
 
+@attrs.frozen
 class AgentCoreVaultHandler:
-
-  def __init__(self, context: Context):
-    self.context = context
+  context: DependencyManager
 
   def run(self):
     while True:

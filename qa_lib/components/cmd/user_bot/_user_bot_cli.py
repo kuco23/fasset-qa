@@ -3,6 +3,8 @@ from .._cmd import Cmd
 from ._user_bot_cli_parser import UserBotCliOutputParser
 
 
+CR_FEE_BUMP_BIPS = 100
+
 class UserBotCli(Cmd, UserBotCliOutputParser):
 
   def __init__(self, run_dir: str, node_path: str, user_bot_executable: str, fasset: str, env: dict[str, str]):
@@ -13,8 +15,13 @@ class UserBotCli(Cmd, UserBotCliOutputParser):
 
   def mint(self, lots: int, agent_vault: Optional[str] = None):
     cmd_ext = ['-a', agent_vault] if agent_vault else []
-    raw = self.run(['mint', str(lots), *cmd_ext])
+    raw = self.run(['mint', str(lots), '--crFeeBump', str(CR_FEE_BUMP_BIPS), *cmd_ext])
     parsed = self.parse_user_mint(raw)
+    return self._ensure_parser_response(parsed)
+
+  def redeem(self, lots: int):
+    raw = self.run(['redeem', str(lots)])
+    parsed = self.parse_user_redeem(raw)
     return self._ensure_parser_response(parsed)
 
   def redeem_from_core_vault(self, lots: int):

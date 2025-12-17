@@ -176,3 +176,5 @@ media
 temp/
 fasset-bots-config/
 log/
+
+load-test-config/

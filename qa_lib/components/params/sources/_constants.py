@@ -22,8 +22,16 @@ class Constants:
   # should be configured dynamicaly
 
   @property
+  def native_token_name(self) -> str:
+    return 'C2FLR'
+
+  @property
   def fasset_name(self) -> str:
     return 'FTestXRP'
+
+  @property
+  def asset_manager_name(self) -> str:
+    return 'AssetManager_FTestXRP'
 
   @property
   def asset_name(self) -> str:

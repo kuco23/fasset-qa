@@ -1,8 +1,8 @@
-from threading import Thread
-from qa_lib import Context, AgentCoreVaultHandler, UserCoreVaultRedeemer
+""" from threading import Thread
+from qa_lib import DependencyManager, AgentCoreVaultHandler, UserCoreVaultRedeemer
 
 if __name__ == '__main__':
-  context = Context()
+  context = DependencyManager()
   acvh = AgentCoreVaultHandler(context)
   ucvr = UserCoreVaultRedeemer(context)
 
@@ -14,3 +14,10 @@ if __name__ == '__main__':
 
   t1.join()
   t2.join()
+ """
+
+from qa_lib.runners.load_test import LoadTest
+from qa_lib import DependencyManager
+
+context = DependencyManager()
+LoadTest(context).run()

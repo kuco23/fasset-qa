@@ -1,6 +1,6 @@
-from qa_lib import Context
+from qa_lib import DependencyManager
 
-context = Context()
+context = DependencyManager()
 
 # 0x2087Bc949Fa84D0628E62e36c38d250E63c2A947
 #context.agent_logic.create_agent('./config/vaults/vault1.json')

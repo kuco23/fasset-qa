@@ -1,5 +1,6 @@
 from typing import List
 from re import findall
+from qa_lib.utils import ParserOutput
 
 
 class CmdParser:
@@ -8,7 +9,7 @@ class CmdParser:
   _integer_re = r'\d+'
 
   @staticmethod
-  def _ensure_parser_response(output: str) -> object:
+  def _ensure_parser_response(output: ParserOutput) -> object:
     assert not output.err, f'could not parse:\n{output.origin}'
     return output.resp
 

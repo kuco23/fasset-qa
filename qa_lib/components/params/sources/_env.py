@@ -1,3 +1,4 @@
+from typing import List
 from os import environ
 from dotenv import load_dotenv
 
@@ -9,6 +10,10 @@ class Env:
     if not Env.loaded:
       load_dotenv()
     Env.loaded = True
+
+  @property
+  def config_path(self) -> str:
+    return environ.get('CONFIG') or './config.toml'
 
   @property
   def database_type(self) -> str:
@@ -43,28 +48,28 @@ class Env:
     return environ.get('RPC_API_KEY')
 
   @property
-  def node_path(self) -> str:
-    return self._required('NODE_PATH')
+  def ripple_rpc_url(self) -> str:
+    return environ.get('XRP_RPC_URL')
 
   @property
-  def fasset_bot_config_path(self) -> str:
-    return self._required('FASSET_BOT_CONFIG')
+  def ripple_rpc_api_key(self) -> str:
+    return environ.get('XRP_RPC_API_KEY')
+
+  # load tests
 
   @property
-  def fasset_bot_secrets_path(self) -> str:
-    return self._required('FASSET_BOT_SECRETS')
+  def load_test_xrp_distributor_seed(self) -> str:
+    return self._required('LOAD_TEST_XRP_DISTRIBUTOR_SEED')
 
   @property
-  def fasset_user_config_path(self) -> str:
-    return self._required('FASSET_USER_CONFIG')
+  def load_test_nat_distributor_pvk(self) -> str:
+    return self._required('LOAD_TEST_NAT_DISTRIBUTOR_PVK')
 
   @property
-  def fasset_user_secrets_path(self) -> str:
-    return self._required('FASSET_USER_SECRETS')
+  def load_test_agent_vaults(self) -> List[str]:
+    return self._required('LOAD_TEST_AGENT_VAULTS').split()
 
-  @property
-  def config_path(self) -> str:
-    return environ.get('CONFIG') or './config.toml'
+  # helpers
 
   @staticmethod
   def _required(name: str) -> str:

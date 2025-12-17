@@ -1,17 +1,20 @@
+import attrs
 from typing import Tuple
-from ..params import ParamLoader
-from ..database import DatabaseManager
-from ..chain import AssetManager
-from ..cmd import AgentBotCli
+from qa_lib.utils import logger
+from qa_lib.components.params import ParamLoader
+from qa_lib.components.common import CommonUtils
+from qa_lib.components.chain import AssetManager
+from qa_lib.components.database import DatabaseManager
+from qa_lib.components.cmd import AgentBotCli
 
 
-class AgentCoreVaultInteracter:
-
-  def __init__(self, params: ParamLoader, database: DatabaseManager, asset_manager: AssetManager, agent_bot: AgentBotCli):
-    self.params = params
-    self.database = database
-    self.asset_manager = asset_manager
-    self.agent_bot = agent_bot
+@attrs.frozen
+class AgentCoreVaultManager:
+  params: ParamLoader
+  utils: CommonUtils
+  database: DatabaseManager
+  asset_manager: AssetManager
+  agent_bot: AgentBotCli
 
   def create_agent(self, settings_path: str, deposit_for_lots: int = 0, make_available: bool = False):
     agent_vault = self.agent_bot.create_agent(settings_path)
@@ -24,14 +27,14 @@ class AgentCoreVaultInteracter:
     if self.agent_has_open_transfer_to_core_vault_requests(agent_vault): return
     optimal_transfer_to_core_vault_uba = self.optimal_agent_transfer_to_core_vault_uba(agent_vault)
     if optimal_transfer_to_core_vault_uba > 0:
-      optimal_transfer_to_core_vault_tok = self.uba_to_tokens(optimal_transfer_to_core_vault_uba)
+      optimal_transfer_to_core_vault_tok = self.utils.uba_to_tokens(optimal_transfer_to_core_vault_uba)
       print(f'transferring {optimal_transfer_to_core_vault_tok} {self.params.fasset_name} to core vault for agent vault {agent_vault}')
       self.agent_bot.transfer_to_core_vault(agent_vault, optimal_transfer_to_core_vault_tok)
 
   def return_from_core_vault_if_makes_sense(self, agent_vault: str):
     if self.agent_has_open_return_from_core_vault_requests(agent_vault): return
     optimal_return_from_core_vault_uba = self.optimal_agent_return_from_core_vault_uba(agent_vault)
-    optimal_return_from_core_vault_lots = self.uba_to_lots(optimal_return_from_core_vault_uba)
+    optimal_return_from_core_vault_lots = self.utils.uba_to_lots(optimal_return_from_core_vault_uba)
     if optimal_return_from_core_vault_lots > 0:
       print(f'returning {optimal_return_from_core_vault_lots} lots of {self.params.fasset_name} from core vault for agent vault {agent_vault}')
       self.agent_bot.return_from_core_vault(agent_vault, optimal_return_from_core_vault_lots)
@@ -45,7 +48,7 @@ class AgentCoreVaultInteracter:
     if total_uba == 0: return 0
     minted_ratio = minted_uba / total_uba
 
-    if minted_ratio > self.params.minted_uba_core_vault_return_threshold_ratio:
+    if minted_ratio > self.params.config.core_vault_manager.minted_uba_core_vault_return_threshold_ratio:
       max_transfer, _  = self.asset_manager.maximum_transfer_to_core_vault(agent_vault)
       return max_transfer
 
@@ -60,7 +63,7 @@ class AgentCoreVaultInteracter:
     if total_uba == 0: return 0
     minted_ratio = minted_uba / total_uba
 
-    if minted_ratio < self.params.minted_uba_core_vault_return_threshold_ratio:
+    if minted_ratio < self.params.config.core_vault_manager.minted_uba_core_vault_return_threshold_ratio:
       _, core_vault_balance = self.asset_manager.core_vault_available_amount()
       max_returned_uba = int(free_uba * self.params.max_free_lots_factor_to_return_from_core_vault)
       return min(core_vault_balance, max_returned_uba)
@@ -80,9 +83,3 @@ class AgentCoreVaultInteracter:
   def agent_has_open_return_from_core_vault_requests(self, agent_vault: str):
     requests = self.database.open_core_vault_returns(agent_vault)
     return len(requests) > 0
-
-  def uba_to_tokens(self, amount: int) -> float:
-    return amount / 10 ** self.params.token_decimals
-
-  def uba_to_lots(self, amount: int) -> int:
-    return amount // self.params.lot_size

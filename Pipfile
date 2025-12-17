@@ -10,6 +10,9 @@ sqlalchemy-utils = "0.41.2"
 psycopg2-binary = "2.9.10"
 web3 = "7.10.0"
 toml = "0.10.2"
+xrpl-py = "4.3.1"
+pydantic = "*"
+dacite = "*"
 
 [scripts]
 main = "python main.py"

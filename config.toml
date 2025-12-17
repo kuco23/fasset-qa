@@ -1,5 +1,8 @@
+[os]
+node_path='node'
+
 [contracts]
-path = './fasset-bots/packages/fasset-bots-core/fasset-deployment/coston.json'
+path = './fasset-bots/packages/fasset-bots-core/fasset-deployment/coston2.json'
 asset_manager_abi = './fasset-bots/packages/fasset-bots-core/artifacts/contracts/userInterfaces/IAssetManager.sol/IAssetManager.json'
 fasset_abi = './fasset-bots/packages/fasset-bots-core/artifacts/contracts/userInterfaces/IFAsset.sol/IFAsset.json'
 
@@ -16,3 +19,9 @@ interact_cycle_sleep_seconds = 300
 
 [core_vault_redeemer_bot]
 interact_cycle_sleep_seconds = 300
+
+[load_test]
+user_xrp_fund = 50
+user_nat_fund = 10000
+fasset_user_config_file_path = './fasset-bots-config/users/user{0}/config.json'
+fasset_user_secrets_file_path = './fasset-bots-config/users/user{0}/secrets.json'
