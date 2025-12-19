@@ -1,9 +1,10 @@
 from typing import List
-from time import sleep
 from random import choice
+from time import sleep
 from attrs import frozen
 from qa_lib.utils import logger
 from qa_lib.components.params import ParamLoader
+from qa_lib.components.chain import FAsset
 from ..standalone import UserMinterAndRedeemer
 from ...chain import RippleWallet, RippleClient, NativeWallet, NativeClient
 
@@ -11,6 +12,7 @@ from ...chain import RippleWallet, RippleClient, NativeWallet, NativeClient
 MAX_MINTED_LOTS = 4
 XRP_DROP_FACTOR = 10 ** 6
 NAT_WEI_FACTOR = 10 ** 18
+CYCLE_SLEEP_SEC = 10
 
 @frozen
 class SimpleUserHive:
@@ -19,9 +21,10 @@ class SimpleUserHive:
   ripple_root: RippleWallet
   native_rpc: NativeClient
   native_root: NativeWallet
+  fasset: FAsset
   users: List[UserMinterAndRedeemer]
 
-  def fund_users(self):
+  def initialize(self):
     root_xrp_balance = self.ripple_rpc.get_balance(self.ripple_root.wallet.address)
     root_nat_balance = self.native_rpc.get_balance(self.native_root.wallet.address)
 
@@ -33,7 +36,8 @@ class SimpleUserHive:
 
     for user in self.users:
       user_xrp_balance = self.ripple_rpc.get_balance(user.underlying_address)
-      if user_xrp_balance < xrp_fund:
+      user_fxrp_balance = self.fasset.balance_of(user.native_address)
+      if user_xrp_balance < xrp_fund and user_fxrp_balance < xrp_fund:
         fund = xrp_fund - user_xrp_balance
         logger.info(f'funding user {user.user_id} with {fund} {self.params.asset_name}')
         self.ripple_root.send_tx(xrp_fund - user_xrp_balance, user.underlying_address)
@@ -45,20 +49,21 @@ class SimpleUserHive:
         self.native_root.send_tx(fund, user.native_address)
         logger.info(f'successfully funded user {user.user_id} with {fund} {self.params.native_token_name}')
 
-  def mint_redeem(self):
+  def run_thread(self, i: int):
     while True:
-      for user in self.users:
-        agent_vault = choice(self.params.load_test_agent_vaults)
-        user.mint(agent_vault, MAX_MINTED_LOTS)
-        user.redeem_all()
-      sleep(10)
+      try:
+        self.run_user_step(i)
+      except Exception as e:
+        logger.error(f'error when running user {i}:', e)
+      sleep(CYCLE_SLEEP_SEC)
 
-  def withdraw_from_users(self):
+  def run_user_step(self, i: int):
+    user = self.users[i]
+    agent_vault = choice(self.params.load_test_agent_vaults)
+    user.mint(agent_vault, MAX_MINTED_LOTS)
+    user.redeem_all()
+
+  def on_finish(self):
     for user in self.users:
       user.redeem_all()
-
-  def run(self):
-    self.fund_users()
-    self.mint_redeem()
-    self.withdraw_from_users()
 

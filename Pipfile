@@ -13,6 +13,7 @@ toml = "0.10.2"
 xrpl-py = "4.3.1"
 pydantic = "*"
 dacite = "*"
+typer = "*"
 
 [scripts]
 main = "python main.py"

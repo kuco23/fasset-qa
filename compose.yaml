@@ -3,9 +3,11 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}
     image: ${CI_REGISTRY_IMAGE}:${DEPLOY_IMAGE_TAG}
     network_mode: host
-    command: ["bash", "entrypoint.sh", "run"]
+    command: ["mint-redeem"]
     restart: unless-stopped
     environment:
+      CONFIG: /app/config.toml
+      CHAIN: ${CHAIN}
       DB_TYPE: ${DB_TYPE}
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
@@ -14,15 +16,13 @@ services:
       DB_PASS: ${DB_PASS}
       RPC_URL: ${RPC_URL}
       RPC_API_KEY: ${RPC_API_KEY}
-      NODE_PATH: /usr/local/bin/node
-      FASSET_BOT_CONFIG: /var/fasset/config.bot.json
-      FASSET_BOT_SECRETS: /var/fasset/secrets.bot.json
-      FASSET_USER_CONFIG: /var/fasset/config.user.json
-      FASSET_USER_SECRETS: /var/fasset/secrets.user.json
-      CONFIG: /app/config.toml
+      XRP_RPC_URL: ${XRP_RPC_URL}
+      XRP_RPC_API_KEY: ${XRP_RPC_API_KEY}
+      LOAD_TEST_XRP_DISTRIBUTOR_SEED: ${LOAD_TEST_XRP_DISTRIBUTOR_SEED}
+      LOAD_TEST_NAT_DISTRIBUTOR_PVK: ${LOAD_TEST_NAT_DISTRIBUTOR_PVK}
+      LOAD_TEST_AGENT_VAULTS: ${LOAD_TEST_AGENT_VAULTS}
     volumes:
-      - ${FASSET_BOT_CONFIG}:/var/fasset/config.bot.json
-      - ${FASSET_BOT_SECRETS}:/var/fasset/secrets.bot.json
-      - ${FASSET_USER_CONFIG}:/var/fasset/config.user.json
-      - ${FASSET_USER_SECRETS}:/var/fasset/secrets.user.json
       - ${CONFIG}:/app/config.toml
+      - ./fasset-bots-config:/app/fasset-bots-config
+      - ./fasset-bots-logs:/app/log
+      - ./fasset-bots-qa-logs:/app/logs

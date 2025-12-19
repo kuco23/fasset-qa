@@ -175,6 +175,12 @@ media
 # temp
 temp/
 fasset-bots-config/
-log/
 
+logs/
+fasset-bots-logs/
+
+log/
+fasset-bots-qa-logs/
+
+.env.user-gen
 load-test-config/

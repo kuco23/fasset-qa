@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from .utils import cached, Singleton
 from .components.database import DatabaseManager
 from .components.params import ParamLoader
@@ -85,7 +85,7 @@ class DependencyManager(metaclass=Singleton):
 
   @property
   @cached
-  def simple_user_bots(self):
+  def simple_user_bots(self) -> List[UserMinterAndRedeemer]:
     ret = []
     for i, user_config in enumerate(self.utils.user_bots_env()):
       user_cli = self._user_bot_cli(user_config)
@@ -102,6 +102,7 @@ class DependencyManager(metaclass=Singleton):
       self.ripple_fund_distributer_wallet,
       self.native_chain_client,
       self.native_fund_distributor_wallet,
+      self.fasset,
       self.simple_user_bots
     )
 

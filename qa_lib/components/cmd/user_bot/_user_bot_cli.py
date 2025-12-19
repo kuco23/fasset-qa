@@ -3,7 +3,7 @@ from .._cmd import Cmd
 from ._user_bot_cli_parser import UserBotCliOutputParser
 
 
-CR_FEE_BUMP_BIPS = 100
+CR_FEE_BUMP = 0.1
 
 class UserBotCli(Cmd, UserBotCliOutputParser):
 
@@ -15,7 +15,7 @@ class UserBotCli(Cmd, UserBotCliOutputParser):
 
   def mint(self, lots: int, agent_vault: Optional[str] = None):
     cmd_ext = ['-a', agent_vault] if agent_vault else []
-    raw = self.run(['mint', str(lots), '--crFeeBump', str(CR_FEE_BUMP_BIPS), *cmd_ext])
+    raw = self.run(['mint', str(lots), '--crFeeBump', str(CR_FEE_BUMP), *cmd_ext])
     parsed = self.parse_user_mint(raw)
     return self._ensure_parser_response(parsed)
 

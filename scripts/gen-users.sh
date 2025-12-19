@@ -2,7 +2,7 @@
 
 set -e
 
-source <(grep -v '^#' "./.env" | sed -E 's|^(.+)=(.*)$|: ${\1=\2}; export \1|g')
+source <(grep -v '^#' "./.env.user-gen" | sed -E 's|^(.+)=(.*)$|: ${\1=\2}; export \1|g')
 
 user_count=$1
 

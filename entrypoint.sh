@@ -1,13 +1,5 @@
 #!/bin/sh
+set -e
 
-chown -R 0:0 /var/fasset/secrets.bot.json
-chown -R 0:0 /var/fasset/secrets.user.json
-
-case $1 in
-    run) python -u -m run;;
-    *)
-    # The wrong first argument.
-    echo "invalid argument: '$1'"
-    echo $USAGE_MSG
-    exit 1
-esac
+chown -R 0:0 /app/fasset-bots-config/users/**/*secrets.json
+python -u -m cli "$@"

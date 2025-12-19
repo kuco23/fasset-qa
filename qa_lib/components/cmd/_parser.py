@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, TypeVar
 from re import findall
 from qa_lib.utils import ParserOutput
 
+T = TypeVar("T")
 
 class CmdParser:
   _hex_address_re = r'0x[a-fA-F\d]{40}'
@@ -9,7 +10,7 @@ class CmdParser:
   _integer_re = r'\d+'
 
   @staticmethod
-  def _ensure_parser_response(output: ParserOutput) -> object:
+  def _ensure_parser_response(output: ParserOutput[T]) -> T:
     assert not output.err, f'could not parse:\n{output.origin}'
     return output.resp
 

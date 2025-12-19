@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.13-nodejs18 AS base
+FROM nikolaik/python-nodejs:python3.13-nodejs20 AS base
 
 # Setup env
 ENV LANG=C.UTF-8
@@ -23,14 +23,9 @@ RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --python 3.13 --deploy
 
 FROM build AS submodule
 
-# Initialize and update submodules
+# Initialize, update, and build submodules
 WORKDIR /app/fasset-bots
-RUN git submodule update --init --recursive
-
-# Build the submodule
-RUN yarn install
-RUN yarn clean
-RUN yarn build
+RUN git submodule update --init --recursive && yarn install --frozen-lockfile && yarn build && yarn cache clean;
 
 FROM base AS runner
 
@@ -46,6 +41,10 @@ COPY --from=submodule /app/fasset-bots ./fasset-bots
 
 # Copy python executables
 COPY --from=build /app/qa_lib/ ./qa_lib/
-COPY --from=build /app/run.py ./run.py
+COPY --from=build /app/cli ./cli
 
-COPY entrypoint.sh ./entrypoint.sh
+# copy entrypoint
+COPY --from=build /app/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]

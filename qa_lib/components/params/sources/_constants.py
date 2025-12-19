@@ -39,7 +39,7 @@ class Constants:
 
   @property
   def lot_size(self) -> int:
-    return 20000000
+    return 10000000
 
   @property
   def token_decimals(self) -> int:
