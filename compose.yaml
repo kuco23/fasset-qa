@@ -1,5 +1,5 @@
 services:
-  core-vault-management:
+  mint-redeem:
     container_name: ${COMPOSE_PROJECT_NAME}
     image: ${CI_REGISTRY_IMAGE}:${DEPLOY_IMAGE_TAG}
     network_mode: host
@@ -8,9 +8,9 @@ services:
     environment:
       CONFIG: /app/config.toml
       CHAIN: ${CHAIN}
-      DB_TYPE: ${DB_TYPE}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
+      DB_TYPE: postgres
+      DB_HOST: db-postgres
+      DB_PORT: 5432
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
@@ -26,3 +26,22 @@ services:
       - ./fasset-bots-config:/app/fasset-bots-config
       - ./fasset-bots-logs:/app/log
       - ./fasset-bots-qa-logs:/app/logs
+
+  db-postgres:
+    image: postgres:16
+    container_name: ${COMPOSE_PROJECT_NAME}-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - 'db_data:/var/lib/postgresql/data'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+
+volumes:
+  db_data:
