@@ -26,6 +26,9 @@ services:
       - ./fasset-bots-config:/app/fasset-bots-config
       - ./fasset-bots-logs:/app/log
       - ./fasset-bots-qa-logs:/app/logs
+    depends_on:
+      db-postgres:
+        condition: service_healthy
 
   db-postgres:
     image: postgres:16
