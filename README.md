@@ -7,7 +7,11 @@ This is the QA repository for the FAssets project. It should empose a standard o
 The FAssets QA repo follows the rules:
 
 1. Tested code is included in the project's submodule,
-2. The code configuration files are inside `fasset-bots-config`,
+2. The code configuration files are inside `fasset-bots-config`.
+
+
+>**Warn**:
+>Dockerfile relies on the state of the submodule. Remember to switch to the relevant branch before building.
 
 ## TODO:
 
