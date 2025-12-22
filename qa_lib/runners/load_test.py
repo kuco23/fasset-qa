@@ -11,7 +11,7 @@ CYCLE_FUND_SLEEP_SEC = 10
 
 @attrs.define
 class LoadTest:
-  context: DependencyManager
+  context: DependencyManager = attrs.field(kw_only=False)
 
   _last_fund = attrs.field(init=False, default=0)
 
