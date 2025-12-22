@@ -24,27 +24,30 @@ class SimpleUserHive:
   fasset: FAsset
   users: List[UserMinterAndRedeemer]
 
-  def initialize(self):
+  def fund(self):
     root_xrp_balance = self.ripple_rpc.get_balance(self.ripple_root.wallet.address)
     root_nat_balance = self.native_rpc.get_balance(self.native_root.wallet.address)
 
-    xrp_fund = self.params.config.load_test.user_xrp_fund * XRP_DROP_FACTOR
-    nat_fund = self.params.config.load_test.user_nat_fund * NAT_WEI_FACTOR
+    xrp_target = self.params.config.load_test.user_target_xrp_balance * XRP_DROP_FACTOR
+    nat_target = self.params.config.load_test.user_target_nat_balance * NAT_WEI_FACTOR
 
-    assert root_xrp_balance > xrp_fund * len(self.users), 'distributor has too little XRP balance'
-    assert root_nat_balance > nat_fund * len(self.users), 'distributor has too little NAT balance'
+    assert root_xrp_balance > xrp_target * len(self.users), 'distributor has too little XRP balance'
+    assert root_nat_balance > nat_target * len(self.users), 'distributor has too little NAT balance'
+
+    xrp_min = self.params.config.load_test.user_min_xrp_balance
+    nat_min = self.params.config.load_test.user_min_nat_balance
 
     for user in self.users:
       user_xrp_balance = self.ripple_rpc.get_balance(user.underlying_address)
       user_fxrp_balance = self.fasset.balance_of(user.native_address)
-      if user_xrp_balance < xrp_fund and user_fxrp_balance < xrp_fund:
-        fund = xrp_fund - user_xrp_balance
+      if user_xrp_balance <= xrp_min and user_fxrp_balance <= xrp_min:
+        fund = xrp_target - user_xrp_balance
         logger.info(f'funding user {user.user_id} with {fund} {self.params.asset_name}')
-        self.ripple_root.send_tx(xrp_fund - user_xrp_balance, user.underlying_address)
+        self.ripple_root.send_tx(xrp_target - user_xrp_balance, user.underlying_address)
         logger.info(f'successfully funded user {user.user_id} with {fund} {self.params.asset_name}')
       user_nat_balance = self.native_rpc.get_balance(user.native_address)
-      if user_nat_balance < nat_fund:
-        fund = nat_fund - user_nat_balance
+      if user_nat_balance <= nat_min:
+        fund = nat_target - user_nat_balance
         logger.info(f'funding user {user.user_id} with {fund} {self.params.native_token_name}')
         self.native_root.send_tx(fund, user.native_address)
         logger.info(f'successfully funded user {user.user_id} with {fund} {self.params.native_token_name}')

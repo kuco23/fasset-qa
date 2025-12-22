@@ -25,10 +25,12 @@ class CoreVaultAgentInteracerBot:
 
 @dataclass
 class ConfigLoadTest:
-  user_xrp_fund: int
-  user_nat_fund: int
   fasset_user_config_file_path: str
   fasset_user_secrets_file_path: str
+  user_target_xrp_balance: int
+  user_target_nat_balance: int
+  user_min_xrp_balance: int
+  user_min_nat_balance: int
 
 @dataclass
 class ConfigOs:

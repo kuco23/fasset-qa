@@ -22,7 +22,9 @@ interact_cycle_sleep_seconds = 300
 interact_cycle_sleep_seconds = 300
 
 [load_test]
-user_xrp_fund = 50
-user_nat_fund = 10000
 fasset_user_config_file_path = './fasset-bots-config/users/user{0}/config.json'
 fasset_user_secrets_file_path = './fasset-bots-config/users/user{0}/secrets.json'
+user_min_xrp_balance = 50
+user_min_nat_balance = 1000
+user_target_xrp_balance = 1000
+user_target_nat_balance = 20000
