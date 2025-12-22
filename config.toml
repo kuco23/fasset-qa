@@ -1,6 +1,6 @@
 [os]
-node_path_os='node'
-node_path='/usr/local/bin/node'
+node_path='node'
+#node_path='/usr/local/bin/node'
 
 [contracts]
 path = './fasset-bots/packages/fasset-bots-core/fasset-deployment/coston2.json'

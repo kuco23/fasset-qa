@@ -34,8 +34,8 @@ class SimpleUserHive:
     assert root_xrp_balance > xrp_target * len(self.users), 'distributor has too little XRP balance'
     assert root_nat_balance > nat_target * len(self.users), 'distributor has too little NAT balance'
 
-    xrp_min = self.params.config.load_test.user_min_xrp_balance
-    nat_min = self.params.config.load_test.user_min_nat_balance
+    xrp_min = self.params.config.load_test.user_min_xrp_balance * XRP_DROP_FACTOR
+    nat_min = self.params.config.load_test.user_min_nat_balance * NAT_WEI_FACTOR
 
     for user in self.users:
       user_xrp_balance = self.ripple_rpc.get_balance(user.underlying_address)
