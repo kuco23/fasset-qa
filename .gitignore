@@ -185,4 +185,4 @@ fasset-bots-qa-logs/
 .env.user-gen
 load-test-config/
 
-./config.toml
+config.toml

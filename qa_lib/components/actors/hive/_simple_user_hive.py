@@ -4,9 +4,8 @@ from time import sleep
 from attrs import frozen
 from qa_lib.utils import logger
 from qa_lib.components.params import ParamLoader
-from qa_lib.components.chain import FAsset
+from qa_lib.components.chain import RippleWallet, RippleClient, NativeWallet, NativeClient, FAsset
 from ..standalone import UserMinterAndRedeemer
-from ...chain import RippleWallet, RippleClient, NativeWallet, NativeClient
 
 
 MAX_MINTED_LOTS = 4
