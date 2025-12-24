@@ -15,5 +15,5 @@ The FAssets QA repo follows the rules:
 
 ## TODO:
 
-- [] in _env.py map property method name to .env parameter name via decorator
-- [] in _config.py load variables from config.toml via attrs.freeze
+- [ ] in _env.py map property method name to .env parameter name via decorator
+- [x] in _config.py load variables from config.toml via dacite
