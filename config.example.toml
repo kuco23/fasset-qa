@@ -21,6 +21,7 @@ interact_cycle_sleep_seconds = 300
 interact_cycle_sleep_seconds = 300
 
 [load_test]
+cycle_sleep_secs = 180
 fasset_user_config_file_path = './fasset-bots-config/users/user{0}/config.json'
 fasset_user_secrets_file_path = './fasset-bots-config/users/user{0}/secrets.json'
 user_min_xrp_balance = 50
